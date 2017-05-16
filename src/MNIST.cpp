@@ -40,10 +40,13 @@ void MNIST::load_image_file(const std::string &path, std::vector<Image> &images)
     auto pixel_buffer = reinterpret_cast<uint8_t *>(buffer.get() + 16);
 
     for (unsigned int i = 0; i < count; ++i) {
-        std::vector<uint8_t> image;
+        std::vector<float> image;
 
         for (unsigned int j = 0; j < rows * columns; ++j) {
-            image.push_back(*(pixel_buffer + i * rows * columns + j));
+            uint8_t value = *(pixel_buffer + i * rows * columns + j);
+            float normalized_value = (float) value / 255.0f;
+
+            image.push_back(normalized_value);
         }
 
         images.push_back(image);

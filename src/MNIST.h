@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-typedef std::vector<uint8_t > Image;
+typedef std::vector<float> Image;
 
 struct MNIST_Dataset {
     std::vector<Image> train_images;
