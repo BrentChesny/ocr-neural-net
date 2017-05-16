@@ -1,6 +1,9 @@
 #include <iostream>
 
+#include "MNIST.h"
+
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    MNIST_Dataset dataset = MNIST::load_dataset();
+
     return 0;
 }
