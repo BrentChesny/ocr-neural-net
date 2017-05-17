@@ -12,7 +12,8 @@ const std::string MNIST::MNIST_TRAIN_LABEL_FILE = "../data/train-labels-idx1-uby
 const std::string MNIST::MNIST_TEST_IMAGE_FILE = "../data/t10k-images-idx3-ubyte";
 const std::string MNIST::MNIST_TEST_LABEL_FILE = "../data/t10k-labels-idx1-ubyte";
 
-MNIST_Dataset MNIST::load_dataset() {
+MNIST_Dataset MNIST::load_dataset()
+{
     MNIST_Dataset dataset;
 
     load_image_file(MNIST_TRAIN_IMAGE_FILE, dataset.train_images);
@@ -30,7 +31,8 @@ MNIST_Dataset MNIST::load_dataset() {
     return dataset;
 }
 
-void MNIST::load_image_file(const std::string &path, std::vector<Image> &images) {
+void MNIST::load_image_file(const std::string &path, std::vector<Image> &images)
+{
     auto buffer = read_file(path, 0x803);
 
     auto count = read_header(buffer, 1);
@@ -53,7 +55,8 @@ void MNIST::load_image_file(const std::string &path, std::vector<Image> &images)
     }
 }
 
-void MNIST::load_label_file(const std::string &path, std::vector<uint8_t > &labels) {
+void MNIST::load_label_file(const std::string &path, std::vector<std::vector<float>> &labels)
+{
     auto buffer = read_file(path, 0x801);
 
     auto count = read_header(buffer, 1);
@@ -61,11 +64,13 @@ void MNIST::load_label_file(const std::string &path, std::vector<uint8_t > &labe
     auto label_buffer = reinterpret_cast<uint8_t *>(buffer.get() + 8);
 
     for (unsigned int i = 0; i < count; ++i) {
-        labels.push_back(*(label_buffer + i));
+        uint8_t value = *(label_buffer + i);
+        labels.push_back(one_hot_encode(value));
     }
 }
 
-std::unique_ptr<uint8_t[]> MNIST::read_file(const std::string& path, uint32_t key) {
+std::unique_ptr<uint8_t[]> MNIST::read_file(const std::string& path, uint32_t key)
+{
     std::ifstream file;
     file.open(path, std::ios::in | std::ios::binary | std::ios::ate);
 
@@ -92,9 +97,23 @@ std::unique_ptr<uint8_t[]> MNIST::read_file(const std::string& path, uint32_t ke
     return buffer;
 }
 
-uint32_t MNIST::read_header(const std::unique_ptr<uint8_t[]>& buffer, size_t position) {
+uint32_t MNIST::read_header(const std::unique_ptr<uint8_t[]>& buffer, size_t position)
+{
     auto header = reinterpret_cast<uint32_t*>(buffer.get());
 
     auto value = *(header + position);
     return (value << 24) | ((value << 8) & 0x00FF0000) | ((value >> 8) & 0X0000FF00) | (value >> 24);
+}
+
+std::vector<float> MNIST::one_hot_encode(uint8_t value)
+{
+    std::vector<float> vec;
+
+    for (uint8_t i = 0; i < 10; ++i) {
+        float bit = (value == i) ? 1.0f : 0.0f;
+
+        vec.push_back(bit);
+    }
+
+    return vec;
 }

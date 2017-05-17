@@ -10,14 +10,16 @@
 
 typedef std::vector<float> Image;
 
-struct MNIST_Dataset {
+struct MNIST_Dataset
+{
     std::vector<Image> train_images;
-    std::vector<uint8_t> train_labels;
+    std::vector<std::vector<float>> train_labels;
     std::vector<Image> test_images;
-    std::vector<uint8_t> test_labels;
+    std::vector<std::vector<float>> test_labels;
 };
 
-class MNIST {
+class MNIST
+{
 public:
     static const std::string MNIST_TRAIN_IMAGE_FILE;
     static const std::string MNIST_TRAIN_LABEL_FILE;
@@ -28,7 +30,8 @@ public:
 
 private:
     static void load_image_file(const std::string &path, std::vector<Image> &images);
-    static void load_label_file(const std::string &path, std::vector<uint8_t > &labels);
+    static void load_label_file(const std::string &path, std::vector<std::vector<float>> &labels);
+    static std::vector<float> one_hot_encode(uint8_t value);
 
     static std::unique_ptr<uint8_t[]> read_file(const std::string& path, uint32_t key);
     static uint32_t read_header(const std::unique_ptr<uint8_t[]> &buffer, size_t position);
