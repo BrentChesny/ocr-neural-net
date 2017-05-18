@@ -7,10 +7,9 @@
 
 
 #include "MNIST.h"
+#include "Trainer.h"
 
-class Network;
-
-class StochasticGradientDescentTrainer
+class StochasticGradientDescentTrainer : public Trainer
 {
 public:
     StochasticGradientDescentTrainer(std::shared_ptr<MNIST_Dataset> dataset, int epochs, int batch_size, float learning_rate);

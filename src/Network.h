@@ -19,7 +19,7 @@ public:
     Network();
 
     void add_layer(size_t input_size, size_t layer_size, ActivatorFunction* activator = new Sigmoid);
-    void train(const StochasticGradientDescentTrainer &trainer);
+    void train(const Trainer &trainer);
     Matrix feedforward(const Matrix &input);
 
     size_t num_layers() const { return _num_layers; }

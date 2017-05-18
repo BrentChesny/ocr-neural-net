@@ -29,7 +29,7 @@ Matrix Network::feedforward(const Matrix &input)
     return output;
 }
 
-void Network::train(const StochasticGradientDescentTrainer &trainer)
+void Network::train(const Trainer &trainer)
 {
     trainer.train(*this);
 }
