@@ -4,24 +4,16 @@
 
 #include "ActivatorFunction.h"
 
-Vec ActivatorFunction::apply(const Vec &vec)
+Matrix ActivatorFunction::apply(const Matrix &vec)
 {
-    Vec result;
-
-    for (unsigned int i = 0; i < vec.size(); ++i) {
-        result.push_back(this->apply(vec[i]));
-    }
-
-    return result;
+    return vec.map([&](float x) -> float {
+        return this->apply(x);
+    });
 }
 
-Vec ActivatorFunction::apply_derivative(const Vec &vec)
+Matrix ActivatorFunction::apply_derivative(const Matrix &vec)
 {
-    Vec result;
-
-    for (unsigned int i = 0; i < vec.size(); ++i) {
-        result.push_back(this->apply_derivative(vec[i]));
-    }
-
-    return result;
+    return vec.map([&](float x) -> float {
+        return this->apply_derivative(x);
+    });
 }

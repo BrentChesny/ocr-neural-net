@@ -5,7 +5,6 @@
 #include "MNIST.h"
 
 #include <fstream>
-#include <iostream>
 
 const std::string MNIST::MNIST_TRAIN_IMAGE_FILE = "../data/train-images-idx3-ubyte";
 const std::string MNIST::MNIST_TRAIN_LABEL_FILE = "../data/train-labels-idx1-ubyte";
@@ -31,7 +30,7 @@ MNIST_Dataset MNIST::load_dataset()
     return dataset;
 }
 
-void MNIST::load_image_file(const std::string &path, std::vector<Image> &images)
+void MNIST::load_image_file(const std::string &path, std::vector<Matrix> &images)
 {
     auto buffer = read_file(path, 0x803);
 
@@ -51,11 +50,11 @@ void MNIST::load_image_file(const std::string &path, std::vector<Image> &images)
             image.push_back(normalized_value);
         }
 
-        images.push_back(image);
+        images.push_back(Matrix::create(image, rows*columns));
     }
 }
 
-void MNIST::load_label_file(const std::string &path, std::vector<std::vector<float>> &labels)
+void MNIST::load_label_file(const std::string &path, std::vector<Matrix> &labels)
 {
     auto buffer = read_file(path, 0x801);
 
@@ -105,7 +104,7 @@ uint32_t MNIST::read_header(const std::unique_ptr<uint8_t[]>& buffer, size_t pos
     return (value << 24) | ((value << 8) & 0x00FF0000) | ((value >> 8) & 0X0000FF00) | (value >> 24);
 }
 
-std::vector<float> MNIST::one_hot_encode(uint8_t value)
+Matrix MNIST::one_hot_encode(uint8_t value)
 {
     std::vector<float> vec;
 
@@ -115,5 +114,5 @@ std::vector<float> MNIST::one_hot_encode(uint8_t value)
         vec.push_back(bit);
     }
 
-    return vec;
+    return Matrix::create(vec, vec.size());
 }

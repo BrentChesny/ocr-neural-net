@@ -1,7 +1,6 @@
 #include "MNIST.h"
 #include "Network.h"
 
-
 int main() {
     MNIST_Dataset dataset = MNIST::load_dataset();
 
