@@ -11,23 +11,23 @@ const std::string MNIST::MNIST_TRAIN_LABEL_FILE = "../data/train-labels-idx1-uby
 const std::string MNIST::MNIST_TEST_IMAGE_FILE = "../data/t10k-images-idx3-ubyte";
 const std::string MNIST::MNIST_TEST_LABEL_FILE = "../data/t10k-labels-idx1-ubyte";
 
-MNIST_Dataset MNIST::load_dataset()
+std::shared_ptr<MNIST_Dataset> MNIST::load_dataset()
 {
-    MNIST_Dataset dataset;
+    MNIST_Dataset *dataset = new MNIST_Dataset;
 
-    load_image_file(MNIST_TRAIN_IMAGE_FILE, dataset.train_images);
-    std::cout << "Loaded training images: " << dataset.train_images.size() << std::endl;
+    load_image_file(MNIST_TRAIN_IMAGE_FILE, dataset->train_images);
+    std::cout << "Loaded training images: " << dataset->train_images.size() << std::endl;
 
-    load_label_file(MNIST_TRAIN_LABEL_FILE, dataset.train_labels);
-    std::cout << "Loaded training labels: " << dataset.train_labels.size() << std::endl;
+    load_label_file(MNIST_TRAIN_LABEL_FILE, dataset->train_labels);
+    std::cout << "Loaded training labels: " << dataset->train_labels.size() << std::endl;
 
-    load_image_file(MNIST_TEST_IMAGE_FILE, dataset.test_images);
-    std::cout << "Loaded test images: " << dataset.test_images.size() << std::endl;
+    load_image_file(MNIST_TEST_IMAGE_FILE, dataset->test_images);
+    std::cout << "Loaded test images: " << dataset->test_images.size() << std::endl;
 
-    load_label_file(MNIST_TEST_LABEL_FILE, dataset.test_labels);
-    std::cout << "Loaded test labels: " << dataset.test_labels.size() << std::endl;
+    load_label_file(MNIST_TEST_LABEL_FILE, dataset->test_labels);
+    std::cout << "Loaded test labels: " << dataset->test_labels.size() << std::endl;
 
-    return dataset;
+    return std::shared_ptr<MNIST_Dataset>(dataset);
 }
 
 void MNIST::load_image_file(const std::string &path, std::vector<Matrix> &images)

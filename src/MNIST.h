@@ -26,7 +26,7 @@ public:
     static const std::string MNIST_TEST_IMAGE_FILE;
     static const std::string MNIST_TEST_LABEL_FILE;
 
-    static MNIST_Dataset load_dataset();
+    static std::shared_ptr<MNIST_Dataset> load_dataset();
 
 private:
     static void load_image_file(const std::string &path, std::vector<Matrix> &images);
