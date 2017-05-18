@@ -2,15 +2,9 @@
 // Created by Brent Chesny on 18/05/2017.
 //
 
+#include <iomanip>
 #include "StochasticGradientDescentTrainer.h"
 #include "Network.h"
-
-StochasticGradientDescentTrainer::StochasticGradientDescentTrainer
-        (std::shared_ptr<MNIST_Dataset> dataset, int epochs, int batch_size, float learning_rate)
-        : _dataset(dataset), _epochs(epochs), _batch_size(batch_size), _learning_rate(learning_rate)
-{
-
-}
 
 void StochasticGradientDescentTrainer::train(Network &network) const
 {
@@ -24,9 +18,10 @@ void StochasticGradientDescentTrainer::train(Network &network) const
             unsigned int end_index = (unsigned int) ((j == num_batches - 1) ? num_samples : (j + 1) * _batch_size);
 
             this->train_mini_batch(network, start_index, end_index);
+            _reporter->progress(i, (float) j / num_batches);
         }
 
-        std::cout << "Epoch " << i << " complete: " << this->evaluate(network) << std::endl;
+        _reporter->result(i, this->evaluate(network));
     }
 }
 
@@ -44,7 +39,7 @@ void StochasticGradientDescentTrainer::train_mini_batch(Network &network, unsign
     }
 
     size_t batch_size = end_index - begin_index;
-    for (size_t i = begin_index; i < end_index; ++i) {
+    for (unsigned int i = begin_index; i < end_index; ++i) {
         Matrix x = _dataset->train_images[i];
         Matrix y = _dataset->train_labels[i];
 

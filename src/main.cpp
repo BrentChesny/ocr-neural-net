@@ -7,8 +7,8 @@ int main() {
 
     // Create our neural network
     Network network;
-    network.add_layer(784, 30);
-    network.add_layer(30, 10);
+    network.add_layer(784, 100);
+    network.add_layer(100, 10);
 
     // Create our trainer
     StochasticGradientDescentTrainer trainer(dataset, 30, 10, 3.0f);

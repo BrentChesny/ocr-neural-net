@@ -8,11 +8,18 @@
 
 #include "MNIST.h"
 #include "Trainer.h"
+#include "CommandLineReporter.h"
 
 class StochasticGradientDescentTrainer : public Trainer
 {
 public:
-    StochasticGradientDescentTrainer(std::shared_ptr<MNIST_Dataset> dataset, int epochs, int batch_size, float learning_rate);
+    StochasticGradientDescentTrainer(std::shared_ptr<MNIST_Dataset> dataset,
+                                     int epochs,
+                                     int batch_size,
+                                     float learning_rate,
+                                     std::unique_ptr<Reporter> reporter = std::unique_ptr<Reporter>(new CommandLineReporter))
+            : _dataset(dataset), _epochs(epochs), _batch_size(batch_size),
+              _learning_rate(learning_rate), _reporter(std::move(reporter)) {}
 
     void train(Network &network) const;
 
@@ -26,6 +33,7 @@ private:
     int _epochs;
     int _batch_size;
     float _learning_rate;
+    std::unique_ptr<Reporter> _reporter;
 };
 
 
